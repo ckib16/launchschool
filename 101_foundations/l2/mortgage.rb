@@ -73,7 +73,8 @@ loop do
   for #{duration} months.
   MSG
 
-  monthly_payment = loan_amount.to_f * (monthly_rate / (1 - (1 + monthly_rate)**-duration.to_i))
+  monthly_payment =
+    loan_amount.to_f * (monthly_rate / (1 - (1 + monthly_rate)**-duration.to_i))
 
   puts ""
   puts " ------ "
