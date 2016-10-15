@@ -13,27 +13,75 @@
 
 # To Do
 # Validation, format float to 2 placed, loop
-
+puts ""
 puts "Welcome to MortgageCorp!"
 
-puts "Loan amount: how much would you like to borrow?"
-loan_amount = gets.chomp.to_i
+loop do
+  puts ""
+  puts "--------"
 
-puts "APR: what annual rate are you looking for? Please input as decimal like 0.05"
-apr = gets.chomp.to_f
-monthly_rate = apr / 12
+  # Loan Amount
+  puts "Loan amount: how much would you like to borrow?"
 
-puts "Duration in months: how many months do you want to pay it off?"
-duration = gets.chomp.to_i
+  loan_amount = ''
+  loop do
+    loan_amount = gets.chomp
 
-puts <<-MSG
-Ok you'd like to borrow
-$#{loan_amount}
-at a #{apr} annual rate
-which equates to a #{monthly_rate} rate
-for #{duration} months.
-MSG
+    if loan_amount.empty? || loan_amount.to_f < 0
+      puts "Please enter positive integer"
+    else
+      break
+    end
+  end
 
-montly_payment = loan_amount * (monthly_rate / (1 - (1 + monthly_rate)**-duration))
+  # APR
+  puts "APR: what annual rate are you looking for?"
+  puts "Please input as integer. Ex: 5 for 5%"
 
-puts "Your monthly payment will be $#{montly_payment}."
+  apr = ''
+
+  loop do
+    apr = gets.chomp
+    if apr.empty? || apr.to_f < 0
+      puts "Must be positive integer"
+    else
+      break
+    end
+  end
+
+  monthly_rate = (apr.to_f / 100) / 12
+
+  # Duration
+  puts "Duration in months: how many months do you want to pay it off?"
+
+  duration = ''
+
+  loop do
+    duration = gets.chomp
+    if duration.empty? || duration.to_i < 0
+      puts "Must be positive integer"
+    else
+      break
+    end
+  end
+
+  puts <<-MSG
+  Ok you'd like to borrow
+  $#{loan_amount}
+  at a #{apr} annual rate
+  which equates to a #{monthly_rate} monthly rate
+  for #{duration} months.
+  MSG
+
+  monthly_payment = loan_amount.to_f * (monthly_rate / (1 - (1 + monthly_rate)**-duration.to_i))
+
+  puts ""
+  puts " ------ "
+  puts "Your monthly payment will be $#{format('%02.2f', monthly_payment)}"
+
+  puts "Do you want to calculate another mortgage? If so press Y"
+  answer = gets.chomp
+  break unless answer.downcase.start_with?('y')
+end
+
+puts "Thanks for calculating with us!"
