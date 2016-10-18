@@ -1,13 +1,15 @@
-VALID_CHOICES = %w(rock paper scissors)
+VALID_CHOICES = %w(rock paper scissors lizard spock)
 
 def prompt(message)
   puts "=> #{message}"
 end
 
 def win?(first, second)
-  (first == 'rock' && second == 'scissors') ||
-    (first == 'paper' && second == 'rock') ||
-    (first == 'scissors' && second == 'paper')
+  (first == 'rock' && second.start_with?('sc', 'l')) ||
+    (first == 'paper' && second.start_with?('r', 'sp')) ||
+    (first == 'scissors' && second.start_with?('p', 'l')) ||
+    (first == 'lizard' && second.start_with?('p', 'sp')) ||
+    (first == 'spock' && second.start_with?('sc', 'r'))
 end
 
 def display_results(player, computer)
@@ -20,7 +22,7 @@ def display_results(player, computer)
   end
 end
 
-prompt("Welome to Rock, Paper, Scissor")
+prompt("Welome to Rock, Paper, Scissors, Lizard, Spock")
 
 loop do
   player_choice = ''
