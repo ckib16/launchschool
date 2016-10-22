@@ -1,7 +1,7 @@
 require 'pry'
 
 VALID_CHOICES = %w(rock paper scissors lizard spock)
-total_wins = 0
+@total_wins = 0
 
 def prompt(message)
   puts "=> #{message}"
@@ -29,14 +29,14 @@ def win?(first, second)
     (first == 'spock' && second.start_with?('sc', 'r'))
 end
 
-def display_results(player, computer, total_wins)
+def display_results(player, computer, wins)
   if win?(player, computer)
     prompt("You win!")
-    total_wins += 1
+    @total_wins = wins + 1
     # binding.pry
   elsif win?(computer, player)
     prompt("You lose!")
-    total_wins -= 1
+    @total_wins = wins - 1
   else
     prompt("It's a tie.")
   end
@@ -64,8 +64,8 @@ loop do
 
   prompt("You chose #{player_choice}. Computer chose #{computer_choice}.")
 
-  display_results(player_choice, computer_choice, total_wins)
-  prompt("Your total wins are #{total_wins}")
+  display_results(player_choice, computer_choice, @total_wins)
+  prompt("Your total wins are #{@total_wins}")
 
   prompt("Want to play again? Press 'y' if Yes.")
   play_again = gets.chomp
