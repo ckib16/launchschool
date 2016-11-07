@@ -9,6 +9,8 @@
 # 9. If yes, got to #1
 # 10. Else goodbye!
 
+require 'pry'
+
 INITIAL_MARKER = ' '
 PLAYER_MARKER = 'X'
 COMPUTER_MARKER = 'O'
@@ -71,11 +73,22 @@ end
 
 def computer_places_pieces!(brd)
   square = nil
+
+  # Defense first
   WINNING_LINES.each do |line|
-    square = find_at_risk_square(line, brd)
+    square = find_at_risk_square(line, brd, PLAYER_MARKER)
     break if square
   end
 
+  # Offense second
+  if !square
+    WINNING_LINES.each do |line|
+      square = find_at_risk_square(line, brd, COMPUTER_MARKER)
+      break if square
+    end
+  end
+
+  # just pick any square
   if !square
     square = empty_squares(brd).sample
   end
@@ -106,9 +119,9 @@ def detect_winner(brd)
   nil
 end
 
-def find_at_risk_square(line, board)
-  if board.values_at(*line).count(PLAYER_MARKER) == 2
-    board.select{|k,v| line.include?(k) && v == INITIAL_MARKER}.keys.first
+def find_at_risk_square(line, board, marker)
+  if board.values_at(*line).count(marker) == 2
+    board.select { |k, v| line.include?(k) && v == INITIAL_MARKER }.keys.first
   else
     nil
   end
