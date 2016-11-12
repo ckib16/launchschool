@@ -44,13 +44,13 @@ def detect_result(dealer_cards, player_cards)
 
   if player_total > 21
     :player_busted
-  elsif dealer_total >21
+  elsif dealer_total > 21
     :dealer_busted
   elsif dealer_total < player_total
     :player
   elsif player_total > dealer_total
     :dealer
-  else
+  elsif player_total == dealer_total
     :tie
   end
 end
@@ -80,6 +80,8 @@ def play_again?
 end
 
 loop do
+  player_wins = 0
+  dealer_wins = 0
   prompt("Let's Play Twenty One")
 
   # initialize
@@ -119,6 +121,7 @@ loop do
   end
 
   if busted?(player_cards)
+    dealer_wins += 1
     display_result(dealer_cards, player_cards)
     play_again? ? next : break
   else
@@ -137,6 +140,7 @@ loop do
   end
 
   if busted?(dealer_cards)
+    player_wins += 1
     prompt "Dealer's total is now #{total(dealer_cards)}"
     display_result(dealer_cards, player_cards)
     play_again? ? next : break
@@ -148,6 +152,7 @@ loop do
   puts "========="
   prompt "Dealer has #{dealer_cards}, for a total of: #{total(dealer_cards)}"
   prompt "Player has #{player_cards}, for a total of: #{total(player_cards)}"
+  prompt "The current score is player:#{player_wins} and dealer:#{dealer_wins}"
   puts "========="
 
   display_result(dealer_cards, player_cards)
