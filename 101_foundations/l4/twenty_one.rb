@@ -2,6 +2,7 @@ require 'pry'
 
 SUITS = ["C", "D", "H", "S"]
 VALUES = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+ROUNDS_TO_WIN = 5
 
 def prompt(msg)
   puts "=> #{msg}"
@@ -48,7 +49,7 @@ def detect_result(dealer_cards, player_cards)
     :dealer_busted
   elsif dealer_total < player_total
     :player
-  elsif player_total > dealer_total
+  elsif player_total < dealer_total
     :dealer
   elsif player_total == dealer_total
     :tie
@@ -79,9 +80,12 @@ def play_again?
   answer.downcase.start_with?('y')
 end
 
+# GAME LOOP START -------------------------
+
+player_wins = 0
+dealer_wins = 0
+
 loop do
-  player_wins = 0
-  dealer_wins = 0
   prompt("Let's Play Twenty One")
 
   # initialize
@@ -123,6 +127,7 @@ loop do
   if busted?(player_cards)
     dealer_wins += 1
     display_result(dealer_cards, player_cards)
+    prompt "The current score is player:#{player_wins} and dealer:#{dealer_wins}"
     play_again? ? next : break
   else
     prompt "You stayed at #{total(player_cards)}"
@@ -139,23 +144,41 @@ loop do
     prompt "Dealer's cards are now: #{dealer_cards}"
   end
 
+  dealer_total = total(dealer_cards)
   if busted?(dealer_cards)
     player_wins += 1
-    prompt "Dealer's total is now #{total(dealer_cards)}"
+    prompt "Dealer's total is now #{dealer_total}"
     display_result(dealer_cards, player_cards)
+    prompt "The current score is player:#{player_wins} and dealer:#{dealer_wins}"
     play_again? ? next : break
   else
-    prompt "Dealer stays at #{total(dealer_cards)}"
+    prompt "Dealer stays at #{dealer_total}"
   end
 
   # both player and dealer stays - compare cards
+  case detect_result(dealer_cards, player_cards)
+  when :player
+    player_wins += 1
+  when :dealer
+    dealer_wins += 1
+  end
+
   puts "========="
-  prompt "Dealer has #{dealer_cards}, for a total of: #{total(dealer_cards)}"
+  prompt "Dealer has #{dealer_cards}, for a total of: #{dealer_total}"
   prompt "Player has #{player_cards}, for a total of: #{total(player_cards)}"
+  prompt ""
+  display_result(dealer_cards, player_cards)
+  prompt ""
   prompt "The current score is player:#{player_wins} and dealer:#{dealer_wins}"
   puts "========="
 
-  display_result(dealer_cards, player_cards)
+  if player_wins == ROUNDS_TO_WIN
+    prompt "You've won 5 rounds!"
+    break
+  elsif dealer_wins == ROUNDS_TO_WIN
+    prompt "Dealer won 5 rounds!"
+    break
+  end
 
   break unless play_again?
 end
