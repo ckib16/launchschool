@@ -11,7 +11,7 @@ loop do
 
   if input.start_with?('y')
 
-    # INCREMENT WORKS: brute force, no method used to increment
+    # INCREMENT WORKS: "brute force" in-line mutation, no refactoring or method used to increment
     # counter += 1
 
     # DOES NOT WORK: we don't save/assign the method's returned value to a local variable for later use. This just returns a new number - 1, 2, 3 etc. - but DOESN'T mutate `counter` to "hold" or "contain" or be assigned that new number.
