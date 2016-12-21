@@ -32,6 +32,6 @@ def palindromic_number?(input_integer)
 end                                                               # => :palindromic_number?
 
 palindromic_number?(34543)   # => true
-palindromic_number?(123210)  # => true
+palindromic_number?(123210)  # => false
 palindromic_number?(22)      # => true
-palindromic_number?(5)        # => true
+palindromic_number?(5)       # => true
